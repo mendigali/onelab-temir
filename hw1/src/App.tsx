@@ -1,31 +1,41 @@
-import { useState, ChangeEvent } from 'react';
+import { ChangeEvent, Component } from 'react';
 import './App.css';
 
-function App() {
-  const [count, setCount] = useState(0);
-
-  const inputHandler = (event: ChangeEvent<HTMLInputElement>) => {
-    setCount(Number(event.target.value));
+class App extends Component {
+  state = {
+    count: 0
   };
 
-  const increment = () => {
-    setCount(count + 1);
+  inputHandler = (event: ChangeEvent<HTMLInputElement>) => {
+    this.setState({
+      count: Number(event.target.value)
+    });
   };
 
-  const decrement = () => {
-    setCount(count - 1);
+  increment = () => {
+    this.setState({
+      count: this.state.count + 1
+    });
   };
 
-  return (
-    <div className="App">
-      <h1>{count}</h1>
-      <label htmlFor="num">Number: </label>
-      <input type="number" name="num" id="num" onChange={inputHandler}/>
-      <br />
-      <button onClick={increment}>Plus</button>
-      <button onClick={decrement}>Minus</button>
-    </div>
-  );
+  decrement = () => {
+    this.setState({
+      count: this.state.count - 1
+    });
+  };
+
+  render() {
+    return (
+      <div className="App">
+        <h1>{this.state.count}</h1>
+        <label htmlFor="num">Number: </label>
+        <input type="number" name="num" id="num" onChange={this.inputHandler} />
+        <br />
+        <button onClick={this.increment}>Plus</button>
+        <button onClick={this.decrement}>Minus</button>
+      </div>
+    );
+  }
 }
 
 export default App;
