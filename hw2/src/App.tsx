@@ -1,27 +1,31 @@
-import { ChangeEvent, useState } from "react";
-import { Box, Container, Grid, Typography } from "@mui/material";
+import { ChangeEvent, useEffect, useState, useRef } from "react";
+import {
+  Alert,
+  AlertColor,
+  Box,
+  Container,
+  Grid,
+  Snackbar,
+  Typography,
+} from "@mui/material";
 import SearchField from "./SearchField";
 import TodoList from "./TodoList";
 import AddField from "./AddField";
 import { Todo } from "./TodoList";
 
-interface AppState {
-  todoList: Todo[];
-  addTextField: string;
-  searchTextField: string;
-}
-
-function App() {
-  const [todos, setTodos] = useState<AppState>({
-    todoList: [],
-    addTextField: "",
-    searchTextField: "",
-  });
+const App = () => {
+  const [todos, setTodos] = useState([] as Todo[]);
+  const [prevTodos, setPrevTodos] = useState([] as Todo[]);
+  const [addTextField, setAddTextField] = useState("");
+  const [searchTextField, setSearchTextField] = useState("");
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] =
+    useState<AlertColor>("success");
 
   const handleCheckboxClick = (id: number) => {
-    setTodos({
-      ...todos,
-      todoList: todos.todoList.map((todo) => {
+    setTodos(
+      todos.map((todo) => {
         if (todo.id === id) {
           return {
             ...todo,
@@ -29,54 +33,79 @@ function App() {
           };
         }
         return todo;
-      }),
-    });
+      })
+    );
   };
 
   const handleDeleteIconClick = (id: number) => {
-    setTodos({
-      ...todos,
-      todoList: todos.todoList.filter((todo) => todo.id !== id),
-    });
+    setPrevTodos(todos);
+    setTodos(todos.filter((todo) => todo.id !== id));
   };
 
   const handleAddButtonClick = () => {
-    if (todos.addTextField !== "") {
-      setTodos({
+    if (addTextField !== "") {
+      setPrevTodos(todos);
+      setTodos([
         ...todos,
-        todoList: [
-          ...todos.todoList,
-          {
-            id: todos.todoList.length + 1,
-            text: todos.addTextField,
-            done: false,
-          },
-        ],
-        addTextField: "",
-      });
+        {
+          id: todos.length + 1,
+          text: addTextField,
+          done: false,
+        },
+      ]);
+      setAddTextField("");
     }
   };
 
   const handleSearchTextFieldChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setTodos({
-      ...todos,
-      searchTextField: e.target.value,
-    });
+    setSearchTextField(e.target.value);
   };
 
   const handleAddTextFieldChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setTodos({
-      ...todos,
-      addTextField: e.target.value,
-    });
+    setAddTextField(e.target.value);
   };
+
+  const handleClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") return;
+    setSnackbarOpen(false);
+  };
+
+  useEffect(() => {
+    if (prevTodos.length > todos.length) {
+      const deletedTodo = prevTodos.find((todo) => !todos.includes(todo));
+      setSnackbarMessage(`Deleted: ${deletedTodo!.text}`);
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
+    } else if (prevTodos.length < todos.length) {
+      const addedTodo = todos.find((todo) => !prevTodos.includes(todo));
+      setSnackbarMessage(`Added: ${addedTodo!.text}`);
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
+    }
+  }, [todos]);
 
   return (
     <Container maxWidth="md">
+      <Snackbar
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "center",
+        }}
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={handleClose}
+      >
+        <Alert onClose={handleClose} severity={snackbarSeverity}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
       <Box my={4}>
         <Typography variant="h3" align="center">
           Todo list of Temir Mendigali
@@ -91,21 +120,21 @@ function App() {
       >
         <Grid item xs={12}>
           <SearchField
-            value={todos.searchTextField}
+            value={searchTextField}
             handleChange={handleSearchTextFieldChange}
           />
         </Grid>
         <Grid item xs={12}>
           <TodoList
-            todos={todos.todoList}
-            searchTextField={todos.searchTextField}
+            todos={todos}
+            searchTextField={searchTextField}
             handleCheckboxClick={handleCheckboxClick}
             handleDeleteIconClick={handleDeleteIconClick}
           />
         </Grid>
         <Grid item xs={12}>
           <AddField
-            value={todos.addTextField}
+            value={addTextField}
             handleButtonClick={handleAddButtonClick}
             handleChange={handleAddTextFieldChange}
           />
@@ -113,6 +142,6 @@ function App() {
       </Grid>
     </Container>
   );
-}
+};
 
 export default App;
