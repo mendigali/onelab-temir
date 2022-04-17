@@ -6,3 +6,4 @@ This repository stores all the code that I write during One Lab lectures and hom
 - [x] Homework 1 _13/04/2022_
 - [x] Lecture 2 _15/04/2022_
 - [x] Homework 2 _17/04/2022_
+- [x] Lecture 3 _17/04/2022_
