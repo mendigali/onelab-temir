@@ -89,7 +89,7 @@ const App = () => {
       setSnackbarSeverity("success");
       setSnackbarOpen(true);
     }
-  }, [todos]);
+  }, [todos.length]);
 
   return (
     <Container maxWidth="md">
