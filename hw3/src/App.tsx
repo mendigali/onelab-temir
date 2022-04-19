@@ -1,26 +1,25 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Routes, Route } from "react-router-dom";
+import LocalizationProvider from "./LocalizationContext";
+import Main from "./Main";
+import About from "./About";
+import Users from "./Users";
+import Navbar from "./Navbar";
+import User from "./User";
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <LocalizationProvider>
+      <>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Main />} />
+          <Route path="about" element={<About />} />
+          <Route path="users" element={<Users />} />
+          <Route path="users/account/profile/:userId" element={<User />} />
+        </Routes>
+      </>
+    </LocalizationProvider>
   );
-}
+};
 
 export default App;

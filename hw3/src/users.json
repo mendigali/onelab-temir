@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "name": "Dan Abramov",
+    "country": "United Kingdom",
+    "email": "gaearon@gmail.com"
+  },
+  {
+    "id": 2,
+    "name": "Pavel Durov",
+    "country": "Russia",
+    "email": "durov@mail.ru"
+  },
+  {
+    "id": 3,
+    "name": "George Hotz",
+    "country": "USA",
+    "email": "geohot@icloud.com"
+  }
+]
