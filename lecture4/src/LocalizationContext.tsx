@@ -1,25 +1,22 @@
 import { useState, useContext, createContext } from "react";
-import { translations } from "./translations";
+import translations from "./translations.json";
 
+type TranslationsJSON = typeof translations.ru;
 export type Language = "ru" | "kk" | "en";
 
 interface LocalizationInterface {
   language: Language;
   setLanguage: (lang: Language) => void;
-  translations: any;
+  text: TranslationsJSON;
 }
 
 const LocalizationContext = createContext<LocalizationInterface>({
   language: "ru",
   setLanguage: (lang: Language) => {},
-  translations: translations,
+  text: translations.ru,
 });
 
-interface LocalizationProps {
-  children: JSX.Element;
-}
-
-const LocalizationProvider = ({ children }: LocalizationProps) => {
+const LocalizationProvider = ({ children }: { children: JSX.Element }) => {
   const [language, setLanguage] = useState<Language>("ru");
 
   return (
@@ -27,7 +24,7 @@ const LocalizationProvider = ({ children }: LocalizationProps) => {
       value={{
         language: language,
         setLanguage: (lang: Language) => setLanguage(lang),
-        translations: translations,
+        text: translations[language],
       }}
     >
       {children}
@@ -36,8 +33,7 @@ const LocalizationProvider = ({ children }: LocalizationProps) => {
 };
 
 export const useLocalization = (): LocalizationInterface => {
-  const localization = useContext(LocalizationContext);
-  return { ...localization };
+  return useContext(LocalizationContext);
 };
 
 export default LocalizationProvider;
