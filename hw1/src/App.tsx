@@ -39,3 +39,8 @@ class App extends Component {
 }
 
 export default App;
+
+// where is functional component variant?)
+// no need for name and id, name is for forms submissions to control fields, id is for css selectors
+// you can write handleEvent rather than inputHandler
+// where is condition if count < 0 ?

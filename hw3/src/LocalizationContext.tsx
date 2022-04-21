@@ -1,42 +1,21 @@
-import { useState, useContext, createContext } from "react";
-import { translations } from "./translations";
+import { createContext, useContext } from "react";
+import { rawTranslations } from "./translations";
 
 export type Language = "ru" | "kk" | "en";
 
-interface LocalizationProviderProps {
-  children: JSX.Element;
-}
-
-interface LocalizationHook {
+type ContextProps = {
   language: Language;
-  setLanguage: any;
-  translations: any;
-}
-
-const LocalizationContext = createContext<Language>("ru");
-const ChangeLocalizationContext = createContext((lang: Language) => {});
-
-const LocalizationProvider = ({ children }: LocalizationProviderProps) => {
-  const [language, setLanguage] = useState<Language>("ru");
-
-  return (
-    <LocalizationContext.Provider value={language}>
-      <ChangeLocalizationContext.Provider
-        value={(lang: Language) => setLanguage(lang)}
-      >
-        {children}
-      </ChangeLocalizationContext.Provider>
-    </LocalizationContext.Provider>
-  );
+  setLanguage: (language: Language) => void;
+  translations: typeof rawTranslations[Language];
 };
 
-export const useLocalization = (): LocalizationHook => {
-  const language = useContext(LocalizationContext);
-  return {
-    language: language,
-    setLanguage: useContext(ChangeLocalizationContext),
-    translations: translations[language],
-  };
-};
+export const LocalizationContext = createContext<ContextProps>({
+  language: "ru",
+  setLanguage: () => {},
+  translations: rawTranslations['ru'],
+});
 
-export default LocalizationProvider;
+export const useLocalization = () => useContext(LocalizationContext);
+
+// Do not mess your code with creating several contexts for only one mission :)
+// I also renamed your translations object to rawTranslations, because it leads variable declaration error

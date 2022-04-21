@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import {
   Alert,
   AlertColor,
@@ -8,17 +8,17 @@ import {
   Snackbar,
   Typography,
 } from "@mui/material";
+
 import SearchField from "./SearchField";
-import TodoList from "./TodoList";
+import { TodoList, Todo } from "./TodoList";
 import AddField from "./AddField";
-import { Todo } from "./TodoList";
 
 const App = () => {
   const [todos, setTodos] = useState([] as Todo[]);
   const [prevTodos, setPrevTodos] = useState([] as Todo[]);
-  const [addTextField, setAddTextField] = useState("");
-  const [searchTextField, setSearchTextField] = useState("");
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [newTodoItem, setNewTodoItem] = useState("");
+  const [searchValue, setSearchValue] = useState("");
+  const [isSnackbarOpened, setIsSnackbarOpened] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] =
     useState<AlertColor>("success");
@@ -29,7 +29,7 @@ const App = () => {
         if (todo.id === id) {
           return {
             ...todo,
-            done: !todo.done,
+            isDone: !todo.isDone,
           };
         }
         return todo;
@@ -43,38 +43,25 @@ const App = () => {
   };
 
   const handleAddButtonClick = () => {
-    if (addTextField !== "") {
+    if (newTodoItem !== "") {
       setPrevTodos(todos);
       setTodos([
         ...todos,
         {
           id: todos.length + 1,
-          text: addTextField,
-          done: false,
+          text: newTodoItem,
+          isDone: false,
         },
       ]);
-      setAddTextField("");
+      setNewTodoItem("");
     }
-  };
-
-  const handleSearchTextFieldChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setSearchTextField(e.target.value);
-  };
-
-  const handleAddTextFieldChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setAddTextField(e.target.value);
   };
 
   const handleClose = (
     event?: React.SyntheticEvent | Event,
     reason?: string
   ) => {
-    if (reason === "clickaway") return;
-    setSnackbarOpen(false);
+    if (reason !== "clickaway") setIsSnackbarOpened(false);
   };
 
   useEffect(() => {
@@ -82,14 +69,14 @@ const App = () => {
       const deletedTodo = prevTodos.find((todo) => !todos.includes(todo));
       setSnackbarMessage(`Deleted: ${deletedTodo!.text}`);
       setSnackbarSeverity("error");
-      setSnackbarOpen(true);
+      setIsSnackbarOpened(true);
     } else if (prevTodos.length < todos.length) {
       const addedTodo = todos.find((todo) => !prevTodos.includes(todo));
       setSnackbarMessage(`Added: ${addedTodo!.text}`);
       setSnackbarSeverity("success");
-      setSnackbarOpen(true);
+      setIsSnackbarOpened(true);
     }
-  }, [todos.length]);
+  }, [todos.length, todos, prevTodos]);
 
   return (
     <Container maxWidth="md">
@@ -98,7 +85,7 @@ const App = () => {
           vertical: "bottom",
           horizontal: "center",
         }}
-        open={snackbarOpen}
+        open={isSnackbarOpened}
         autoHideDuration={3000}
         onClose={handleClose}
       >
@@ -120,23 +107,23 @@ const App = () => {
       >
         <Grid item xs={12}>
           <SearchField
-            value={searchTextField}
-            handleChange={handleSearchTextFieldChange}
+            value={searchValue}
+            handleChange={(e) => setSearchValue(e.target.value)}
           />
         </Grid>
         <Grid item xs={12}>
           <TodoList
             todos={todos}
-            searchTextField={searchTextField}
+            searchValue={searchValue}
             handleCheckboxClick={handleCheckboxClick}
             handleDeleteIconClick={handleDeleteIconClick}
           />
         </Grid>
         <Grid item xs={12}>
           <AddField
-            value={addTextField}
+            value={newTodoItem}
             handleButtonClick={handleAddButtonClick}
-            handleChange={handleAddTextFieldChange}
+            handleChange={(e) => setNewTodoItem(e.target.value)}
           />
         </Grid>
       </Grid>
@@ -145,3 +132,18 @@ const App = () => {
 };
 
 export default App;
+
+// Nice Job!!
+// fix warnings in console
+  // remove unused modules (useRef)
+  // if the length of array todos is changed, aren't values todos and prevTodo also changed?
+  //(in useEffect write all list of dependencies 92 code line, 104 slide 2nd pres-n)
+
+// maybe you can use decomposition, better to divide App.tsx code in Todo Component, App returns <Todo/>
+// write shortly if you can for handlers, functions
+// follow naming conventions 
+//for hooks and variables:
+  // searchValue - searchValue ...
+  // setSnackbarOpen would make think it is function that sets true to snackbar, but it is not,
+    // so use SetIsSnackbarOpened that sets true or false for isSnackbarOpene
+  //...etc

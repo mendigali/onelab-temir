@@ -10,3 +10,5 @@ This repository stores all the code that I write during One Lab lectures and hom
 - [x] Homework 3 _19/04/2022_
 - [ ] Lecture 4 _19/04/2022_
 - [ ] Homework 4 _20/04/2022_
+
+### I have refactored some of your code in hw-s, but not in lecture practises

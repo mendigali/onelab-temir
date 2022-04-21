@@ -1,25 +1,15 @@
-import { Routes, Route } from "react-router-dom";
-import LocalizationProvider from "./LocalizationContext";
-import Main from "./Main";
-import About from "./About";
-import Users from "./Users";
-import Navbar from "./Navbar";
-import User from "./User";
+import { CustomApp } from "./CustomApp";
 
 const App = () => {
   return (
-    <LocalizationProvider>
-      <>
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<Main />} />
-          <Route path="about" element={<About />} />
-          <Route path="users" element={<Users />} />
-          <Route path="users/account/profile/:userId" element={<User />} />
-        </Routes>
-      </>
-    </LocalizationProvider>
+    <CustomApp/>
   );
 };
 
 export default App;
+
+// 10 out of 10!
+
+//No need to create LocalizationProvider component (using built in keywords as your component name)
+  // it can confuse who reads your code
+  // I created CustomApp instead

@@ -1,4 +1,4 @@
-export const translations = {
+export const rawTranslations = {
   en: {
     navbar: {
       home: "Home",
