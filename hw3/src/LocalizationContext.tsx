@@ -1,42 +1,39 @@
 import { useState, useContext, createContext } from "react";
-import { translations } from "./translations";
+import translations from "./translations.json";
 
+type TranslationsJSON = typeof translations.ru;
 export type Language = "ru" | "kk" | "en";
 
-interface LocalizationProviderProps {
-  children: JSX.Element;
-}
-
-interface LocalizationHook {
+interface LocalizationInterface {
   language: Language;
-  setLanguage: any;
-  translations: any;
+  setLanguage: (lang: Language) => void;
+  text: TranslationsJSON;
 }
 
-const LocalizationContext = createContext<Language>("ru");
-const ChangeLocalizationContext = createContext((lang: Language) => {});
+const LocalizationContext = createContext<LocalizationInterface>({
+  language: "ru",
+  setLanguage: (lang: Language) => {},
+  text: translations.ru,
+});
 
-const LocalizationProvider = ({ children }: LocalizationProviderProps) => {
+const LocalizationProvider = ({ children }: { children: JSX.Element }) => {
   const [language, setLanguage] = useState<Language>("ru");
 
   return (
-    <LocalizationContext.Provider value={language}>
-      <ChangeLocalizationContext.Provider
-        value={(lang: Language) => setLanguage(lang)}
-      >
-        {children}
-      </ChangeLocalizationContext.Provider>
+    <LocalizationContext.Provider
+      value={{
+        language: language,
+        setLanguage: (lang: Language) => setLanguage(lang),
+        text: translations[language],
+      }}
+    >
+      {children}
     </LocalizationContext.Provider>
   );
 };
 
-export const useLocalization = (): LocalizationHook => {
-  const language = useContext(LocalizationContext);
-  return {
-    language: language,
-    setLanguage: useContext(ChangeLocalizationContext),
-    translations: translations[language],
-  };
+export const useLocalization = (): LocalizationInterface => {
+  return useContext(LocalizationContext);
 };
 
 export default LocalizationProvider;

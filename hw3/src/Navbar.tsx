@@ -13,21 +13,20 @@ import {
 import { useLocalization, Language } from "./LocalizationContext";
 
 const Navbar = () => {
-  const { language, setLanguage, translations } = useLocalization();
+  const { language, setLanguage, text } = useLocalization();
 
-  const text = translations.navbar;
   const ROUTES = [
     {
       path: "/",
-      name: text.home,
+      name: text.navbar.home,
     },
     {
       path: "/about",
-      name: text.about,
+      name: text.navbar.about,
     },
     {
       path: "/users",
-      name: text.users,
+      name: text.navbar.users,
     },
   ];
 

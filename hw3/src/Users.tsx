@@ -13,16 +13,14 @@ import { useLocalization } from "./LocalizationContext";
 import users from "./users.json";
 
 const Users = () => {
-  const { translations } = useLocalization();
-
-  const text = translations.users;
+  const { text } = useLocalization();
 
   return (
     <Container maxWidth="sm">
       <Paper elevation={5}>
         <Box m={3} py={3}>
           <Typography variant="h4" align="center">
-            {text.listTitle}
+            {text.users.listTitle}
           </Typography>
           <List>
             {users.map((user) => (

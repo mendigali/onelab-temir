@@ -2,17 +2,14 @@ import { Typography } from "@mui/material";
 import { useLocalization } from "./LocalizationContext";
 
 const Main = () => {
-  const { translations } = useLocalization();
-
-  const text = translations.home;
-
+  const { text } = useLocalization();
   return (
     <>
       <Typography variant="h1" align="center">
-        {text.title}
+        {text.home.title}
       </Typography>
       <Typography variant="body1" align="center">
-        {text.description}
+        {text.home.description}
       </Typography>
     </>
   );
