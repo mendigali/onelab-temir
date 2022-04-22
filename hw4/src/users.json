@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "name": "Dan Abramov",
+    "username": "gaearon",
+    "password": "qwerty123"
+  },
+  {
+    "id": 2,
+    "name": "Pavel Durov",
+    "username": "durov",
+    "password": "123456"
+  },
+  {
+    "id": 3,
+    "name": "George Hotz",
+    "username": "geohot",
+    "password": "qwerty12345"
+  }
+]
